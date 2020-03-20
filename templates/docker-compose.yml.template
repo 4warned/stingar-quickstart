@@ -1,0 +1,57 @@
+version: '3'
+services:
+  elasticsearch:
+    image: {docker_repository}stingar/elasticsearch:latest
+    volumes:
+      - ./storage/data:/usr/share/elasticsearch/data:z
+    ports:
+      - "127.0.0.1:9200:9200"
+      - "127.0.0.1:9300:9300"
+    environment:
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+  kibana:
+    image: {docker_repository}stingar/kibana:latest
+    ports:
+      - "127.0.0.1:5601:5601"
+    depends_on:
+      - elasticsearch
+  fluentd:
+    image: {docker_repository}stingar/fluentd:latest
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+      - "127.0.0.1:24225:24225"
+      - "127.0.0.1:24225:24225/udp"
+    env_file:
+      - stingar.env
+    depends_on:
+      - elasticsearch
+  stingarapi:
+    image: {docker_repository}stingar/stingar-api:latest
+    env_file:
+      - stingar.env
+    volumes:
+      - ./storage/db:/srv/db:z
+    depends_on:
+      - elasticsearch
+  stingarui:
+    image: {docker_repository}stingar/stingar-ui:latest
+    env_file:
+      - ./stingar-ui.env
+  web:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 80:440
+      - 443:443
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:z
+      - ./stingar-nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: on-failure
+  langstroth:
+    image: {docker_repository}stingar/langstroth:latest
+    env_file:
+      - stingar.env
+    depends_on:
+      - stingarapi
