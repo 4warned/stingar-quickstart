@@ -2,6 +2,7 @@ import os
 import sys
 import socket
 import string
+import shutil
 import secrets
 from getpass import getpass
 from urllib.parse import urlparse
@@ -34,7 +35,7 @@ def generate_secret(length=32):
 
 def generate_stingar_file(output_file, template_file, force_overwrite=True, **kwargs):
     with open(template_file) as env_template_file:
-        template = env_template_file.read().format(**kwargs)
+        template = string.Template(env_template_file.read()).safe_substitute(kwargs)
 
     if not os.path.exists(output_file) or force_overwrite:
         f = open(output_file, 'w')
@@ -45,6 +46,10 @@ def generate_stingar_file(output_file, template_file, force_overwrite=True, **kw
         sys.stderr.write("Not writing file, add -f to override\n")
 
 
+def test_registry_login(registry, username, password):
+    return os.system("docker login -u %s -p %s %s" % (username, password, registry))
+
+
 def configure_stingar():
     print( make_color(
         "BOLD",
@@ -52,21 +57,29 @@ def configure_stingar():
          "domain must be resolvable. E.g.: sub.domain.tld or localhost/stingar.")))
 
     domain = None
-    while not domain:
-        domain = input('Domain: ')
+    url = None
+    while not url:
+        url = input('Domain: ')
         # if it's a bare fqdn, prepend the proto scheme https so we can use urlparse
         # without a scheme, urlparse puts the full url + path all in netloc attribute of its return object
         # that makes it difficult later to determine if there's a custom path in the url
-        if not domain.startswith('http'):
-            domain = 'https://' + domain
-        url_parsed = urlparse(domain)
+        if not url.startswith('http'):
+            url = 'https://' + url
+        url_parsed = urlparse(url)
         try:
             socket.gethostbyname(url_parsed.netloc)
+            domain = url_parsed.netloc
         except Exception as e:
             sys.stderr.write(
                 make_color("FAIL",
                            "%s is not an active domain name\n" % url_parsed.netloc))
             domain = None
+            url = None
+
+    cert_path = input(make_color("BOLD",
+                      "Please enter your SSL certificate path. [./certs]: "))
+    if not cert_path:
+        cert_path = "./certs"
 
     touch('stingar.env')
 
@@ -84,6 +97,15 @@ def configure_stingar():
             'Please enter the username for the Docker registry: ')
         docker_password = getpass(
             'Please enter the password for the Docker registry: ')
+
+        print(make_color("BOLD",
+                         "Testing registry authentication..."))
+        if test_registry_login(docker_repository, docker_username, docker_password):
+            print(make_color("FAIL",
+                             "Authentication to %s failed." % docker_repository))
+            exit(-1)
+        print(make_color("BOLD",
+                         "Authentication to %s succeeded." % docker_repository))
 
     # Configure CIFv3 output options
     cif_enabled = "false"
@@ -105,7 +127,7 @@ def configure_stingar():
     # Generate stingar.env
     generate_stingar_file(output_file="stingar.env",
                       template_file="templates/stingar.env.template",
-                      api_host=domain,
+                      api_host=url,
                       api_key=generate_secret(),
                       passphrase=generate_secret(),
                       salt=generate_secret(),
@@ -115,16 +137,64 @@ def configure_stingar():
                       cif_provider=cif_provider,
                       docker_repository=docker_repository,
                       docker_username=docker_username,
-                      docker_password=docker_password
+                      docker_password=docker_password,
+                      ui_hostname=domain
                      )
 
+    # Generate nginx.conf
+    generate_stingar_file(output_file="nginx.conf",
+                          template_file="templates/nginx.conf.template",
+                          ui_hostname=domain)
+
+    if docker_repository:
+        docker_repository = docker_repository + "/"
     # Generate docker-compose.yml
     generate_stingar_file(output_file="docker-compose.yml",
-                      template_file="templates/docker-compose.yml.template",
-                      docker_repository=docker_repository + "/"
+                          template_file="templates/docker-compose.yml.template",
+                          docker_repository=docker_repository,
+                          cert_path=cert_path
                      )
 
+
+def get_docker_path():
+    return shutil.which("docker")
+
+
+def get_docker_compose_path():
+    return shutil.which("docker-compose")
+
+
 def main():
+
+    # Check if docker is installed
+    print(make_color(
+        "BOLD",
+        "Checking if 'docker' is installed..."))
+    docker_path = get_docker_path()
+    if not docker_path:
+        sys.stderr.write(
+            make_color("FAIL",
+                       "'docker' not found.\n"))
+        exit(-1)
+    print(make_color(
+        "BOLD",
+        "'docker' found at path '%s'\n" % docker_path))
+
+    # Check if docker-compose is installed
+    print(make_color(
+        "BOLD",
+        "Checking if 'docker-compose' is installed..."))
+    docker_compose_path = get_docker_compose_path()
+    if not docker_compose_path:
+        sys.stderr.write(
+            make_color("FAIL",
+                       "'docker-compose' not found.\n"))
+        exit(-1)
+    print(make_color(
+        "BOLD",
+        "'docker-compose' found at path '%s'\n" % docker_compose_path))
+
+
     stingar_env_exists = os.path.exists(
         "stingar.env")
 
