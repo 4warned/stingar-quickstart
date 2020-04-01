@@ -38,7 +38,7 @@ services:
   stingarui:
     image: ${docker_repository}stingar/stingar-ui:latest
     env_file:
-      - ./stingar-ui.env
+      - ./stingar.env
     volumes:
       - bundle:/bundle
       - node_module_cache:/stingar-ui/node_modules
