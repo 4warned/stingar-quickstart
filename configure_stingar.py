@@ -131,6 +131,7 @@ def configure_stingar():
                       api_key=generate_secret(),
                       passphrase=generate_secret(),
                       salt=generate_secret(),
+                      fluent_key=generate_secret(),
                       cif_enabled=cif_enabled,
                       cif_host=cif_host,
                       cif_token=cif_token,
