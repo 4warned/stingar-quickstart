@@ -49,6 +49,13 @@ http {
             proxy_read_timeout          300;
             send_timeout                300;
         }
+        location /docs {
+            proxy_pass http://docs:8080/docs;
+            proxy_connect_timeout       300;
+            proxy_send_timeout          300;
+            proxy_read_timeout          300;
+            send_timeout                300;
+        }
         location / {
             proxy_pass http://stingarui:3000/;
             proxy_set_header    Host $host;

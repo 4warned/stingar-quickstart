@@ -51,6 +51,7 @@ services:
     volumes:
       - ${cert_path}:/etc/nginx/conf.d:z
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - credentials:/credentials
     restart: on-failure
   langstroth:
     image: ${docker_repository}stingar/langstroth:latest
@@ -61,4 +62,5 @@ services:
 volumes:
   bundle:
   node_module_cache:
+  credentials:
   es_data:
