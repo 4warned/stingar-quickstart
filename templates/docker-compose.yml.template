@@ -1,5 +1,7 @@
 version: '3'
 services:
+  docs:
+    image: ${docker_repository}stingar/stingar-user-docs:latest
   elasticsearch:
     image: ${docker_repository}stingar/elasticsearch:latest
     volumes:
