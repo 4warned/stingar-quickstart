@@ -127,7 +127,6 @@ def configure_stingar():
     # Generate stingar.env
     generate_stingar_file(output_file="stingar.env",
                       template_file="templates/stingar.env.template",
-                      api_host=url,
                       api_key=generate_secret(),
                       passphrase=generate_secret(),
                       salt=generate_secret(),
@@ -139,7 +138,8 @@ def configure_stingar():
                       docker_repository=docker_repository,
                       docker_username=docker_username,
                       docker_password=docker_password,
-                      ui_hostname=domain
+                      ui_hostname=domain,
+                      fluentd_hostname=domain
                      )
 
     # Generate nginx.conf
