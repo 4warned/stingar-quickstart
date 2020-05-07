@@ -95,10 +95,10 @@ def configure_stingar():
         answer = 'y'
     set_registry = answer.lower() == ("y" or "yes")
     if set_registry:
-        prompt = make_color("BOLD","Please enter the URL for the Docker registry:") + make_color("OKBLUE", " [https://stingar-registry.security.duke.edu/] ")
+        prompt = make_color("BOLD","Please enter the URL for the Docker registry:") + make_color("OKBLUE", " [https://stingar-registry.security.duke.edu] ")
         docker_repository = input(prompt)
         if not docker_repository:
-            docker_repository = "https://stingar-registry.security.duke.edu/"
+            docker_repository = "https://stingar-registry.security.duke.edu"
         prompt = make_color("BOLD",'Please enter your Docker registry ') + make_color("UNDERLINE","username") + ": "
         docker_username = input(prompt)
         prompt = make_color("BOLD",'Please enter your Docker registry ') + make_color("UNDERLINE","password") + ": "
