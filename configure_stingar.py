@@ -29,7 +29,7 @@ def touch(fname, times=None):
 
 def generate_secret(length=32):
     alphabet = string.ascii_letters + string.digits
-    secret = ''.join(secrets.choice(alphabet) for i in range(length))
+    secret = ''.join(secrets.choice(alphabet) for _ in range(length))
     return secret
 
 
@@ -41,7 +41,7 @@ def generate_stingar_file(output_file, template_file, force_overwrite=True, **kw
         f = open(output_file, 'w')
         f.write(template)
         f.close()
-        msg = make_color("OKGREEN","Wrote file to %s" % output_file)
+        msg = make_color("OKGREEN", "Wrote file to %s" % output_file)
         print(msg)
     else:
         sys.stderr.write("Not writing file, add -f to override\n")
@@ -52,7 +52,7 @@ def test_registry_login(registry, username, password):
 
 
 def configure_stingar():
-    print( make_color(
+    print(make_color(
         "BOLD",
         ("Enter the URL where your STINGAR web app will be available. The "
          "domain must be resolvable. E.g.: sub.domain.tld or localhost/stingar.")))
@@ -60,7 +60,7 @@ def configure_stingar():
     domain = None
     url = None
     while not url:
-        prompt = make_color("BOLD","  Domain: ")
+        prompt = make_color("BOLD", "  Domain: ")
         url = input(prompt)
         # if it's a bare fqdn, prepend the proto scheme https so we can use urlparse
         # without a scheme, urlparse puts the full url + path all in netloc attribute of its return object
@@ -78,7 +78,7 @@ def configure_stingar():
             domain = None
             url = None
 
-    prompt = make_color("BOLD","Please enter your SSL certificate path:") + make_color("OKBLUE", " [./certs] ")
+    prompt = make_color("BOLD", "Please enter your SSL certificate path:") + make_color("OKBLUE", " [./certs] ")
     cert_path = input(prompt)
     if not cert_path:
         cert_path = "./certs"
@@ -89,19 +89,21 @@ def configure_stingar():
     docker_repository = ""
     docker_username = ""
     docker_password = ""
-    prompt = make_color("BOLD","Do you wish to specify an alternate Docker registry? (y/n):") + make_color("OKBLUE", " [y] ")
+    prompt = make_color("BOLD", "Do you wish to specify an alternate Docker registry? (y/n):") + make_color("OKBLUE",
+                                                                                                            " [y] ")
     answer = input(prompt)
     if not answer:
         answer = 'y'
     set_registry = answer.lower() == ("y" or "yes")
     if set_registry:
-        prompt = make_color("BOLD","Please enter the URL for the Docker registry:") + make_color("OKBLUE", " [stingar-registry.security.duke.edu] ")
+        prompt = make_color("BOLD", "Please enter the URL for the Docker registry:") \
+                 + make_color("OKBLUE", " [stingar-registry.security.duke.edu] ")
         docker_repository = input(prompt)
         if not docker_repository:
             docker_repository = "stingar-registry.security.duke.edu"
-        prompt = make_color("BOLD",'Please enter your Docker registry ') + make_color("UNDERLINE","username") + ": "
+        prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "username") + ": "
         docker_username = input(prompt)
-        prompt = make_color("BOLD",'Please enter your Docker registry ') + make_color("UNDERLINE","password") + ": "
+        prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "password") + ": "
         docker_password = getpass(prompt)
 
         print("Testing registry authentication...")
@@ -117,36 +119,37 @@ def configure_stingar():
     cif_host = ""
     cif_token = ""
     cif_provider = ""
-    prompt = make_color("BOLD", "Do you wish to enable logging to a remote CIFv3 server? (y/n): ") +  make_color("OKBLUE", " [n] ")
+    prompt = make_color("BOLD", "Do you wish to enable logging to a remote CIFv3 server? (y/n): ") + \
+        make_color("OKBLUE", " [n] ")
     answer = input(prompt)
     enable_cif = answer.lower() == ("y" or "yes")
     if enable_cif:
         cif_enabled = "true"
-        prompt = make_color("BOLD",'Please enter the URL for the remote CIFv3 server: ')
+        prompt = make_color("BOLD", 'Please enter the URL for the remote CIFv3 server: ')
         cif_host = input(prompt)
-        prompt = make_color("BOLD",'Please enter the API token for the remote CIFv3 server: ')
+        prompt = make_color("BOLD", 'Please enter the API token for the remote CIFv3 server: ')
         cif_token = input(prompt)
-        prompt = make_color("BOLD",'Please enter a name you wish to be associated with your organization: ')
+        prompt = make_color("BOLD", 'Please enter a name you wish to be associated with your organization: ')
         cif_provider = input(prompt)
 
     print("")
     # Generate stingar.env
     generate_stingar_file(output_file="stingar.env",
-                      template_file="templates/stingar.env.template",
-                      api_key=generate_secret(),
-                      passphrase=generate_secret(),
-                      salt=generate_secret(),
-                      fluent_key=generate_secret(),
-                      cif_enabled=cif_enabled,
-                      cif_host=cif_host,
-                      cif_token=cif_token,
-                      cif_provider=cif_provider,
-                      docker_repository=docker_repository,
-                      docker_username=docker_username,
-                      docker_password=docker_password,
-                      ui_hostname=domain,
-                      fluentd_hostname=domain
-                     )
+                          template_file="templates/stingar.env.template",
+                          api_key=generate_secret(),
+                          passphrase=generate_secret(),
+                          salt=generate_secret(),
+                          fluent_key=generate_secret(),
+                          cif_enabled=cif_enabled,
+                          cif_host=cif_host,
+                          cif_token=cif_token,
+                          cif_provider=cif_provider,
+                          docker_repository=docker_repository,
+                          docker_username=docker_username,
+                          docker_password=docker_password,
+                          ui_hostname=domain,
+                          fluentd_hostname=domain
+                          )
 
     # Generate nginx.conf
     generate_stingar_file(output_file="nginx.conf",
@@ -160,7 +163,7 @@ def configure_stingar():
                           template_file="templates/docker-compose.yml.template",
                           docker_repository=docker_repository,
                           cert_path=cert_path
-                     )
+                          )
     print("")
 
 
@@ -195,13 +198,13 @@ def main():
         exit(-1)
     print("   'docker-compose' found at path '%s'\n" % docker_compose_path)
 
-
     stingar_env_exists = os.path.exists(
         "stingar.env")
 
     reconfig = False
     if stingar_env_exists:
-        prompt = make_color("BOLD","Previous stingar.env file detected. Do you wish to reconfigure? (y/n):") + make_color("OKBLUE", " [y] ")
+        prompt = make_color("BOLD", "Previous stingar.env file detected. Do you wish to reconfigure? (y/n):") + \
+                 make_color("OKBLUE", " [y] ")
         answer = input(prompt)
         if not answer:
             answer = 'y'
