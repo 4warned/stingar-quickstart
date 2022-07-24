@@ -86,7 +86,7 @@ def configure_stingar():
     touch('stingar.env')
 
     # Configure Docker repository information
-    docker_repository = ""
+    docker_repository = "4warned"
     docker_username = ""
     docker_password = ""
     prompt = make_color("BOLD", "Do you wish to specify an alternate Docker registry? (y/n):") + make_color("OKBLUE",
@@ -97,22 +97,23 @@ def configure_stingar():
     set_registry = answer.lower() == ("y" or "yes")
     if set_registry:
         prompt = make_color("BOLD", "Please enter the URL for the Docker registry:") \
-                 + make_color("OKBLUE", " [stingarregistry.azurecr.io] ")
+                 + make_color("OKBLUE", " [hub.docker.com] ")
         docker_repository = input(prompt)
         if not docker_repository:
-            docker_repository = "stingarregistry.azurecr.io"
+            docker_repository = "4warned"
+            #docker_repository = "stingarregistry.azurecr.io"
         prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "username") + ": "
         docker_username = input(prompt)
         prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "password") + ": "
         docker_password = getpass(prompt)
 
         print("Testing registry authentication...")
-        if test_registry_login(docker_repository, docker_username, docker_password):
-            print(make_color("FAIL",
-                             "Authentication to %s failed." % docker_repository))
-            exit(-1)
-        print(make_color("OKGREEN",
-                         "Authentication to %s succeeded." % docker_repository))
+        #if test_registry_login(docker_repository, docker_username, docker_password):
+       #     print(make_color("FAIL",
+       #                      "Authentication to %s failed." % docker_repository))
+       #     exit(-1)
+       # print(make_color("OKGREEN",
+       #                  "Authentication to %s succeeded." % docker_repository))
 
     # Configure CIFv3 output options
     cif_enabled = "false"
@@ -156,8 +157,8 @@ def configure_stingar():
                           template_file="templates/nginx.conf.template",
                           ui_hostname=domain)
 
-    if docker_repository:
-        docker_repository = docker_repository + "/"
+    #if docker_repository:
+    #    docker_repository = docker_repository + "/"
     # Generate docker-compose.yml
     generate_stingar_file(output_file="docker-compose.yml",
                           template_file="templates/docker-compose.yml.template",

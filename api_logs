@@ -1,0 +1,498 @@
+
+
+
+
+
+/apiarist/storage/db/__init__.py:48: SAWarning: relationship 'Tag.deployments' will copy column tags.id to column deployment_tags.tag_id, which conflicts with relationship(s): 'Deployment.tags' (copies tags.id to deployment_tags.tag_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="tags"' to the 'Tag.deployments' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+
+  user = session.query(User).filter(User.username == username).first()
+
+/apiarist/storage/db/__init__.py:48: SAWarning: relationship 'Tag.deployments' will copy column deployments.id to column deployment_tags.deployment_id, which conflicts with relationship(s): 'Deployment.tags' (copies deployments.id to deployment_tags.deployment_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="tags"' to the 'Tag.deployments' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+
+  user = session.query(User).filter(User.username == username).first()
+
+INFO:root:Creating config template for cowrie
+
+Successfully created user admin with token 'ALuK36NnYRf5p4LiJOz6JNVWSBMSTuF9'.
+
+172.28.0.4 - - [24/Jul/2022:18:50:24 +0000] "POST //api/v2/deploy HTTP/1.1" 200 12 "-" "python-requests/2.28.1"
+
+172.28.0.4 - - [24/Jul/2022:18:50:34 +0000] "POST //api/v2/deploy HTTP/1.1" 200 12 "-" "python-requests/2.28.1"
+
+172.28.0.4 - - [24/Jul/2022:18:50:44 +0000] "POST //api/v2/deploy HTTP/1.1" 200 12 "-" "python-requests/2.28.1"
+
+172.28.0.4 - - [24/Jul/2022:18:50:54 +0000] "POST //api/v2/deploy HTTP/1.1" 200 12 "-" "python-requests/2.28.1"
+
+172.28.0.8 - - [24/Jul/2022:18:50:56 +0000] "GET /api/v2/users?username=admin HTTP/1.1" 200 224 "-" "Faraday v1.4.1"
+
+172.28.0.8 - - [24/Jul/2022:18:51:03 +0000] "GET /api/v2/users?username=admin HTTP/1.1" 200 224 "-" "Faraday v1.4.1"
+
+172.28.0.8 - - [24/Jul/2022:18:51:03 +0000] "PUT /api/v2/users/1 HTTP/1.1" 200 221 "-" "Faraday v1.4.1"
+
+/apiarist/storage/db/__init__.py:470: SAWarning: relationship 'Tag.deployments' will copy column tags.id to column deployment_tags.tag_id, which conflicts with relationship(s): 'Deployment.tags' (copies tags.id to deployment_tags.tag_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="tags"' to the 'Tag.deployments' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+
+  query = session.query(model)
+
+/apiarist/storage/db/__init__.py:470: SAWarning: relationship 'Tag.deployments' will copy column deployments.id to column deployment_tags.deployment_id, which conflicts with relationship(s): 'Deployment.tags' (copies deployments.id to deployment_tags.deployment_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="tags"' to the 'Tag.deployments' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+
+  query = session.query(model)
+
+INFO:root:Config template created for cowrie.
+
+INFO:root:Creating config template for dionaea
+
+INFO:root:Config template created for dionaea.
+
+INFO:root:Creating config template for conpot
+
+INFO:root:Config template created for conpot.
+
+INFO:root:Creating config template for amun
+
+INFO:root:Config template created for amun.
+
+INFO:root:Creating config template for rdphoney
+
+INFO:root:Config template created for rdphoney.
+
+/apiarist/storage/db/__init__.py:470: SAWarning: relationship 'Tag.deployments' will copy column tags.id to column deployment_tags.tag_id, which conflicts with relationship(s): 'Deployment.tags' (copies tags.id to deployment_tags.tag_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="tags"' to the 'Tag.deployments' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+
+  query = session.query(model)
+
+/apiarist/storage/db/__init__.py:470: SAWarning: relationship 'Tag.deployments' will copy column deployments.id to column deployment_tags.deployment_id, which conflicts with relationship(s): 'Deployment.tags' (copies deployments.id to deployment_tags.deployment_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="tags"' to the 'Tag.deployments' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+
+  query = session.query(model)
+
+INFO:root:Creating default Kibana objects.
+
+INFO:root:Default Kibana objects created.
+
+[2022-07-24 18:50:14 +0000] [125] [INFO] Starting gunicorn 20.1.0
+
+[2022-07-24 18:50:14 +0000] [125] [INFO] Listening at: http://0.0.0.0:8000 (125)
+
+[2022-07-24 18:50:14 +0000] [125] [INFO] Using worker: sync
+
+[2022-07-24 18:50:14 +0000] [134] [INFO] Booting worker with pid: 134
+
+/apiarist/storage/db/__init__.py:88: SAWarning: relationship 'Tag.deployments' will copy column tags.id to column deployment_tags.tag_id, which conflicts with relationship(s): 'Deployment.tags' (copies tags.id to deployment_tags.tag_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="tags"' to the 'Tag.deployments' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+
+  user = session.query(User).filter(User.token == token).first()
+
+/apiarist/storage/db/__init__.py:88: SAWarning: relationship 'Tag.deployments' will copy column deployments.id to column deployment_tags.deployment_id, which conflicts with relationship(s): 'Deployment.tags' (copies deployments.id to deployment_tags.deployment_id). If this is not the intention, consider if these relationships should be linked with back_populates, or if viewonly=True should be applied to one or more if they are read-only. For the less common case that foreign key constraints are partially overlapping, the orm.foreign() annotation can be used to isolate the columns that should be written towards.   To silence this warning, add the parameter 'overlaps="tags"' to the 'Tag.deployments' relationship. (Background on this error at: https://sqlalche.me/e/14/qzyx)
+
+  user = session.query(User).filter(User.token == token).first()
+
+[2022-07-24 18:51:03 +0000] [134] [ERROR] Socket error processing request.
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 175, in _new_conn
+
+    (self._dns_host, self.port), self.timeout, **extra_kw
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/util/connection.py", line 72, in create_connection
+
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+
+  File "/usr/local/lib/python3.6/socket.py", line 745, in getaddrinfo
+
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+
+socket.gaierror: [Errno -2] Name does not resolve
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connectionpool.py", line 710, in urlopen
+
+    chunked=chunked,
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connectionpool.py", line 398, in _make_request
+
+    conn.request(method, url, **httplib_request_kw)
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 239, in request
+
+    super(HTTPConnection, self).request(method, url, body=body, headers=headers)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1239, in request
+
+    self._send_request(method, url, body, headers, encode_chunked)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1285, in _send_request
+
+    self.endheaders(body, encode_chunked=encode_chunked)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1234, in endheaders
+
+    self._send_output(message_body, encode_chunked=encode_chunked)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1026, in _send_output
+
+    self.send(msg)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 964, in send
+
+    self.connect()
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 205, in connect
+
+    conn = self._new_conn()
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 187, in _new_conn
+
+    self, "Failed to establish a new connection: %s" % e
+
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x400c964828>: Failed to establish a new connection: [Errno -2] Name does not resolve
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/requests/adapters.py", line 450, in send
+
+    timeout=timeout
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connectionpool.py", line 788, in urlopen
+
+    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/util/retry.py", line 592, in increment
+
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='kibana', port=5601): Max retries exceeded with url: /kibana/api/saved_objects/_find?per_page=10000&search=&search_fields=title&type=index-pattern&type=dashboard&type=visualization&type=search (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x400c964828>: Failed to establish a new connection: [Errno -2] Name does not resolve',))
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/workers/sync.py", line 136, in handle
+
+    self.handle_request(listener, req, client, addr)
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/workers/sync.py", line 194, in handle_request
+
+    util.reraise(*sys.exc_info())
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/util.py", line 626, in reraise
+
+    raise value
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/workers/sync.py", line 179, in handle_request
+
+    respiter = self.wsgi(environ, resp.start_response)
+
+  File "/usr/local/lib/python3.6/site-packages/falcon/api.py", line 269, in __call__
+
+    responder(req, resp, **params)
+
+  File "/apiarist/resources/kibana.py", line 40, in on_get
+
+    results = kb.get_current_objects(**params)
+
+  File "/apiarist/storage/kibana/__init__.py", line 124, in get_current_objects
+
+    results = self.session.get(url, params=params)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/sessions.py", line 542, in get
+
+    return self.request('GET', url, **kwargs)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/sessions.py", line 529, in request
+
+    resp = self.send(prep, **send_kwargs)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/sessions.py", line 645, in send
+
+    r = adapter.send(request, **kwargs)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/adapters.py", line 519, in send
+
+    raise ConnectionError(e, request=request)
+
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='kibana', port=5601): Max retries exceeded with url: /kibana/api/saved_objects/_find?per_page=10000&search=&search_fields=title&type=index-pattern&type=dashboard&type=visualization&type=search (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x400c964828>: Failed to establish a new connection: [Errno -2] Name does not resolve',))
+
+[2022-07-24 18:51:03 +0000] [134] [ERROR] Socket error processing request.
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 175, in _new_conn
+
+    (self._dns_host, self.port), self.timeout, **extra_kw
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/util/connection.py", line 72, in create_connection
+
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+
+  File "/usr/local/lib/python3.6/socket.py", line 745, in getaddrinfo
+
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+
+socket.gaierror: [Errno -2] Name does not resolve
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connectionpool.py", line 710, in urlopen
+
+    chunked=chunked,
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connectionpool.py", line 398, in _make_request
+
+    conn.request(method, url, **httplib_request_kw)
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 239, in request
+
+    super(HTTPConnection, self).request(method, url, body=body, headers=headers)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1239, in request
+
+    self._send_request(method, url, body, headers, encode_chunked)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1285, in _send_request
+
+    self.endheaders(body, encode_chunked=encode_chunked)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1234, in endheaders
+
+    self._send_output(message_body, encode_chunked=encode_chunked)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1026, in _send_output
+
+    self.send(msg)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 964, in send
+
+    self.connect()
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 205, in connect
+
+    conn = self._new_conn()
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 187, in _new_conn
+
+    self, "Failed to establish a new connection: %s" % e
+
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x400cdb9748>: Failed to establish a new connection: [Errno -2] Name does not resolve
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/requests/adapters.py", line 450, in send
+
+    timeout=timeout
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connectionpool.py", line 788, in urlopen
+
+    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/util/retry.py", line 592, in increment
+
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='kibana', port=5601): Max retries exceeded with url: /kibana/api/kibana/dashboards/import?force=True (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x400cdb9748>: Failed to establish a new connection: [Errno -2] Name does not resolve',))
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/workers/sync.py", line 136, in handle
+
+    self.handle_request(listener, req, client, addr)
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/workers/sync.py", line 194, in handle_request
+
+    util.reraise(*sys.exc_info())
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/util.py", line 626, in reraise
+
+    raise value
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/workers/sync.py", line 179, in handle_request
+
+    respiter = self.wsgi(environ, resp.start_response)
+
+  File "/usr/local/lib/python3.6/site-packages/falcon/api.py", line 269, in __call__
+
+    responder(req, resp, **params)
+
+  File "/apiarist/resources/kibana.py", line 78, in on_post
+
+    results = kb.import_objects(objects, force=True)
+
+  File "/apiarist/storage/kibana/__init__.py", line 144, in import_objects
+
+    results = self.session.post(url, params=params, data=json.dumps(data))
+
+  File "/usr/local/lib/python3.6/site-packages/requests/sessions.py", line 577, in post
+
+    return self.request('POST', url, data=data, json=json, **kwargs)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/sessions.py", line 529, in request
+
+    resp = self.send(prep, **send_kwargs)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/sessions.py", line 645, in send
+
+    r = adapter.send(request, **kwargs)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/adapters.py", line 519, in send
+
+    raise ConnectionError(e, request=request)
+
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='kibana', port=5601): Max retries exceeded with url: /kibana/api/kibana/dashboards/import?force=True (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x400cdb9748>: Failed to establish a new connection: [Errno -2] Name does not resolve',))
+
+[2022-07-24 18:51:03 +0000] [134] [ERROR] Socket error processing request.
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 175, in _new_conn
+
+    (self._dns_host, self.port), self.timeout, **extra_kw
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/util/connection.py", line 72, in create_connection
+
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+
+  File "/usr/local/lib/python3.6/socket.py", line 745, in getaddrinfo
+
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+
+socket.gaierror: [Errno -2] Name does not resolve
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connectionpool.py", line 710, in urlopen
+
+    chunked=chunked,
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connectionpool.py", line 398, in _make_request
+
+    conn.request(method, url, **httplib_request_kw)
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 239, in request
+
+    super(HTTPConnection, self).request(method, url, body=body, headers=headers)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1239, in request
+
+    self._send_request(method, url, body, headers, encode_chunked)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1285, in _send_request
+
+    self.endheaders(body, encode_chunked=encode_chunked)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1234, in endheaders
+
+    self._send_output(message_body, encode_chunked=encode_chunked)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 1026, in _send_output
+
+    self.send(msg)
+
+  File "/usr/local/lib/python3.6/http/client.py", line 964, in send
+
+    self.connect()
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 205, in connect
+
+    conn = self._new_conn()
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connection.py", line 187, in _new_conn
+
+    self, "Failed to establish a new connection: %s" % e
+
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x400cdaf748>: Failed to establish a new connection: [Errno -2] Name does not resolve
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/requests/adapters.py", line 450, in send
+
+    timeout=timeout
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/connectionpool.py", line 788, in urlopen
+
+    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
+
+  File "/usr/local/lib/python3.6/site-packages/urllib3/util/retry.py", line 592, in increment
+
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='kibana', port=5601): Max retries exceeded with url: /kibana/api/saved_objects/_find?per_page=10000&search=default_dashboard&search_fields=title&type=index-pattern&type=dashboard&type=visualization&type=search (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x400cdaf748>: Failed to establish a new connection: [Errno -2] Name does not resolve',))
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/workers/sync.py", line 136, in handle
+
+    self.handle_request(listener, req, client, addr)
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/workers/sync.py", line 194, in handle_request
+
+    util.reraise(*sys.exc_info())
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/util.py", line 626, in reraise
+
+    raise value
+
+  File "/usr/local/lib/python3.6/site-packages/gunicorn/workers/sync.py", line 179, in handle_request
+
+    respiter = self.wsgi(environ, resp.start_response)
+
+  File "/usr/local/lib/python3.6/site-packages/falcon/api.py", line 269, in __call__
+
+    responder(req, resp, **params)
+
+  File "/apiarist/resources/kibana.py", line 40, in on_get
+
+    results = kb.get_current_objects(**params)
+
+  File "/apiarist/storage/kibana/__init__.py", line 124, in get_current_objects
+
+    results = self.session.get(url, params=params)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/sessions.py", line 542, in get
+
+    return self.request('GET', url, **kwargs)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/sessions.py", line 529, in request
+
+    resp = self.send(prep, **send_kwargs)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/sessions.py", line 645, in send
+
+    r = adapter.send(request, **kwargs)
+
+  File "/usr/local/lib/python3.6/site-packages/requests/adapters.py", line 519, in send
+
+    raise ConnectionError(e, request=request)
+
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='kibana', port=5601): Max retries exceeded with url: /kibana/api/saved_objects/_find?per_page=10000&search=default_dashboard&search_fields=title&type=index-pattern&type=dashboard&type=visualization&type=search (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x400cdaf748>: Failed to establish a new connection: [Errno -2] Name does not resolve',))
