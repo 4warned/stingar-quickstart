@@ -1,10 +1,10 @@
 version: '3'
 services:
   docs:
-    image: ${docker_repository}/stingar-user-docs:latest
+    image: 4warned/stingar-user-docs:latest
   elasticsearch:
     user: "1000"
-    image: ${docker_repository}/elasticsearch:latest
+    image: 4warned/elasticsearch:latest
     volumes:
       - es_data:/usr/share/elasticsearch/data:z
     ports:
@@ -15,13 +15,13 @@ services:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
   kibana:
     user: "1000"
-    image: ${docker_repository}/kibana:latest
+    image: 4warned/kibana:latest
     ports:
       - "127.0.0.1:5601:5601"
     depends_on:
       - elasticsearch
   fluentd:
-    image: ${docker_repository}/fluentd:latest
+    image: 4warned/fluentd:latest
     ports:
       - "24224:24224"
       - "24224:24224/udp"
@@ -32,7 +32,7 @@ services:
     depends_on:
       - elasticsearch
   stingarapi:
-    image: ${docker_repository}/stingar-api:latest
+    image: 4warned/stingar-api:latest
     env_file:
       - stingar.env
     volumes:
@@ -40,7 +40,7 @@ services:
     depends_on:
       - elasticsearch
   stingarui:
-    image: ${docker_repository}/stingar-ui:latest
+    image: 4warned/stingar-ui:latest
     env_file:
       - ./stingar.env
     volumes:
@@ -58,7 +58,7 @@ services:
       - credentials:/credentials
     restart: on-failure
   langstroth:
-    image: ${docker_repository}/langstroth:latest
+    image: 4warned/langstroth:latest
     env_file:
       - stingar.env
     depends_on:

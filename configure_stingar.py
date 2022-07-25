@@ -89,25 +89,25 @@ def configure_stingar():
     docker_repository = "4warned"
     docker_username = ""
     docker_password = ""
-    prompt = make_color("BOLD", "Do you wish to specify an alternate Docker registry? (y/n):") + make_color("OKBLUE",
-                                                                                                            " [y] ")
-    answer = input(prompt)
-    if not answer:
-        answer = 'y'
-    set_registry = answer.lower() == ("y" or "yes")
-    if set_registry:
-        prompt = make_color("BOLD", "Please enter the URL for the Docker registry:") \
-                 + make_color("OKBLUE", " [hub.docker.com] ")
-        docker_repository = input(prompt)
-        if not docker_repository:
-            docker_repository = "4warned"
-            #docker_repository = "stingarregistry.azurecr.io"
-        prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "username") + ": "
-        docker_username = input(prompt)
-        prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "password") + ": "
-        docker_password = getpass(prompt)
+    #prompt = make_color("BOLD", "Do you wish to specify an alternate Docker registry? (y/n):") + make_color("OKBLUE",
+    #                                                                                                        " [y] ")
+    #answer = input(prompt)
+    #if not answer:
+    #    answer = 'y'
+    #set_registry = answer.lower() == ("y" or "yes")
+    #if set_registry:
+    #    prompt = make_color("BOLD", "Please enter the URL for the Docker registry:") \
+    #             + make_color("OKBLUE", " [hub.docker.com] ")
+    #    docker_repository = input(prompt)
+    #    if not docker_repository:
+    #        docker_repository = "4warned"
+    #        #docker_repository = "stingarregistry.azurecr.io"
+    #    prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "username") + ": "
+    #    docker_username = input(prompt)
+    #    prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "password") + ": "
+    #    docker_password = getpass(prompt)
 
-        print("Testing registry authentication...")
+    #    print("Testing registry authentication...")
         #if test_registry_login(docker_repository, docker_username, docker_password):
        #     print(make_color("FAIL",
        #                      "Authentication to %s failed." % docker_repository))
