@@ -86,7 +86,7 @@ def configure_stingar():
     touch('stingar.env')
 
     # Configure Docker repository information
-    docker_repository = "4warned"
+    docker_repository = ""
     docker_username = ""
     docker_password = ""
     #prompt = make_color("BOLD", "Do you wish to specify an alternate Docker registry? (y/n):") + make_color("OKBLUE",
