@@ -22,6 +22,8 @@ services:
       - elasticsearch
   fluentd:
     image: 4warned/fluentd:latest
+    volumnes:
+      - ./stingar-logs:/var/log/stingar
     ports:
       - "24224:24224"
       - "24224:24224/udp"
