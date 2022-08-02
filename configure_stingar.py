@@ -115,6 +115,18 @@ def configure_stingar():
        # print(make_color("OKGREEN",
        #                  "Authentication to %s succeeded." % docker_repository))
 
+    # Configure syslog outpout options
+    syslog_enabled = "false"
+    syslog_host = ""
+    prompt = make_color("BOLD", "Do you wish to enable Syslog logging to a remote syslog server? (y/n): ") + \
+        make_color("OKBLUE", " [n] ")
+    answer = input(prompt)
+    enable_syslog = answer.lower() == ("y" or "yes")
+    if enable_syslog:
+        syslog_enabled = "true"
+        prompt = make_color("BOLD", 'Please enter the URL for the remote Syslog server: ')
+        syslog_host = input(prompt)
+
     # Configure CIFv3 output options
     cif_enabled = "false"
     cif_host = ""
@@ -145,6 +157,9 @@ def configure_stingar():
                           cif_host=cif_host,
                           cif_token=cif_token,
                           cif_provider=cif_provider,
+                          syslog_enabled=syslog_enabled,
+                          syslog_host=syslog_host,
+                          syslog_token=syslog_token,
                           docker_repository=docker_repository,
                           docker_username=docker_username,
                           docker_password=docker_password,
