@@ -159,7 +159,6 @@ def configure_stingar():
                           cif_provider=cif_provider,
                           syslog_enabled=syslog_enabled,
                           syslog_host=syslog_host,
-                          syslog_token=syslog_token,
                           docker_repository=docker_repository,
                           docker_username=docker_username,
                           docker_password=docker_password,
