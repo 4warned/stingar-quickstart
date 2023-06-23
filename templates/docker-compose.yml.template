@@ -20,6 +20,8 @@ services:
       - "127.0.0.1:5601:5601"
     depends_on:
       - elasticsearch
+  redis:
+    image: redis:7.0.4
   fluentd:
     image: 4warned/fluentd:latest
     volumes:
