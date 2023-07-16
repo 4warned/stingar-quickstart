@@ -7,12 +7,14 @@ services:
     image: 4warned/elasticsearch:latest
     volumes:
       - es_data:/usr/share/elasticsearch/data:z
+      #- ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      #- ./backup:/usr/share/elasticsearch/backup
     ports:
       - "127.0.0.1:9200:9200"
       - "127.0.0.1:9300:9300"
     environment:
       discovery.type: "single-node"
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m" # modify this runtime memory allocation setting as appropriate (e.g. "-Xmx1G -Xms1G")
   kibana:
     user: "1000"
     image: 4warned/kibana:latest
@@ -35,6 +37,9 @@ services:
       - stingar.env
     depends_on:
       - elasticsearch
+    #volumes:
+      #  - ./stingar-logs:/var/log/stingar
+      #  - ./fluent.conf:/fluentd/etc/fluent.conf
   stingarapi:
     image: 4warned/stingar-api:latest
     env_file:
