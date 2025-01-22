@@ -1,12 +1,11 @@
-version: '3'
 services:
   docs:
-    image: 4warned/stingar-user-docs:latest
+    image: 4warned/stingar-user-docs:v2.1
   elasticsearch:
     user: "1000"
-    image: 4warned/elasticsearch:latest
+    image: 4warned/elasticsearch:v2.1
     volumes:
-      - es_data:/usr/share/elasticsearch/data:z
+      - elastic_data:/usr/share/elasticsearch/data:z
       #- ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       #- ./backup:/usr/share/elasticsearch/backup
     ports:
@@ -17,7 +16,7 @@ services:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m" # modify this runtime memory allocation setting as appropriate (e.g. "-Xmx1G -Xms1G")
   kibana:
     user: "1000"
-    image: 4warned/kibana:latest
+    image: 4warned/kibana:v2.1
     ports:
       - "127.0.0.1:5601:5601"
     depends_on:
@@ -25,9 +24,7 @@ services:
   redis:
     image: redis:7.0.4
   fluentd:
-    image: 4warned/fluentd:latest
-    volumes:
-      - ./stingar-logs:/var/log/stingar
+    image: 4warned/fluentd:v2.1
     ports:
       - "24224:24224"
       - "24224:24224/udp"
@@ -41,7 +38,7 @@ services:
       #  - ./stingar-logs:/var/log/stingar
       #  - ./fluent.conf:/fluentd/etc/fluent.conf
   stingarapi:
-    image: 4warned/stingar-api:latest
+    image: 4warned/stingar-api:v2.1
     env_file:
       - stingar.env
     volumes:
@@ -49,7 +46,7 @@ services:
     depends_on:
       - elasticsearch
   stingarui:
-    image: 4warned/stingar-ui:latest
+    image: 4warned/stingar-ui:v2.1
     env_file:
       - ./stingar.env
     volumes:
@@ -67,7 +64,7 @@ services:
       - credentials:/credentials
     restart: on-failure
   langstroth:
-    image: 4warned/langstroth:latest
+    image: 4warned/langstroth:v2.1
     env_file:
       - stingar.env
     depends_on:
@@ -76,4 +73,4 @@ volumes:
   bundle:
   node_module_cache:
   credentials:
-  es_data:
+  elastic_data:
