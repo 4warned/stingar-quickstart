@@ -1,9 +1,15 @@
 services:
   docs:
     image: 4warned/stingar-user-docs:v2.1
+
   elasticsearch:
     user: "1000"
     image: 4warned/elasticsearch:v2.1
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health?wait_for_status=yellow || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - elastic_data:/usr/share/elasticsearch/data:z
       #- ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
@@ -13,16 +19,20 @@ services:
       - "127.0.0.1:9300:9300"
     environment:
       discovery.type: "single-node"
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m" # modify this runtime memory allocation setting as appropriate (e.g. "-Xmx1G -Xms1G")
+      ES_JAVA_OPTS: "-Xmx1G -Xms1G" # modify this runtime memory allocation setting as appropriate (e.g. "-Xmx1G -Xms1G")
+  
   kibana:
     user: "1000"
     image: 4warned/kibana:v2.1
     ports:
       - "127.0.0.1:5601:5601"
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
+
   redis:
     image: redis:7.0.4
+
   fluentd:
     image: 4warned/fluentd:v2.1
     ports:
@@ -33,10 +43,12 @@ services:
     env_file:
       - stingar.env
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
     #volumes:
       #  - ./stingar-logs:/var/log/stingar
       #  - ./fluent.conf:/fluentd/etc/fluent.conf
+      
   stingarapi:
     image: 4warned/stingar-api:v2.1
     env_file:
@@ -44,7 +56,9 @@ services:
     volumes:
       - ./storage/db:/srv/db:z
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
+
   stingarui:
     image: 4warned/stingar-ui:v2.1
     env_file:
@@ -52,6 +66,7 @@ services:
     volumes:
       - bundle:/bundle
       - node_module_cache:/stingar-ui/node_modules
+
   web:
     image: nginx
     container_name: nginx
@@ -59,18 +74,21 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ${cert_path}:/etc/nginx/conf.d:z
+      - ./certs:/etc/nginx/conf.d:z
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - credentials:/credentials
     restart: on-failure
+
   langstroth:
     image: 4warned/langstroth:v2.1
     env_file:
       - stingar.env
     depends_on:
       - stingarapi
+
 volumes:
   bundle:
   node_module_cache:
   credentials:
   elastic_data:
+
