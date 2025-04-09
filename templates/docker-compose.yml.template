@@ -1,10 +1,10 @@
 services:
   docs:
-    image: 4warned/stingar-user-docs:v2.1
+    image: 4warned/stingar-user-docs:latest
 
   elasticsearch:
     user: "1000"
-    image: 4warned/elasticsearch:v2.1
+    image: 4warned/elasticsearch:latest
     healthcheck:
       test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health?wait_for_status=yellow || exit 1"]
       interval: 10s
@@ -23,7 +23,7 @@ services:
   
   kibana:
     user: "1000"
-    image: 4warned/kibana:v2.1
+    image: 4warned/kibana:latest
     ports:
       - "127.0.0.1:5601:5601"
     depends_on:
@@ -34,7 +34,7 @@ services:
     image: redis:7.0.4
 
   fluentd:
-    image: 4warned/fluentd:v2.1
+    image: 4warned/fluentd:latest
     ports:
       - "24224:24224"
       - "24224:24224/udp"
@@ -50,7 +50,7 @@ services:
       #  - ./fluent.conf:/fluentd/etc/fluent.conf
       
   stingarapi:
-    image: 4warned/stingar-api:v2.1
+    image: 4warned/stingar-api:latest
     env_file:
       - stingar.env
     volumes:
@@ -60,7 +60,7 @@ services:
         condition: service_healthy
 
   stingarui:
-    image: 4warned/stingar-ui:v2.1
+    image: 4warned/stingar-ui:latest
     env_file:
       - ./stingar.env
     volumes:
@@ -80,7 +80,7 @@ services:
     restart: on-failure
 
   langstroth:
-    image: 4warned/langstroth:v2.1
+    image: 4warned/langstroth:latest
     env_file:
       - stingar.env
     depends_on:
