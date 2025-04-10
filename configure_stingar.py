@@ -186,8 +186,8 @@ def get_docker_path():
     return shutil.which("docker")
 
 
-def get_docker_compose_path():
-    return shutil.which("docker-compose")
+#def get_docker_compose_path():
+    #return shutil.which("docker-compose")
 
 
 def main():
@@ -204,14 +204,14 @@ def main():
     print("   'docker' found at path '%s'\n" % docker_path)
 
     # Check if docker-compose is installed
-    print("Checking if 'docker-compose' is installed...")
-    docker_compose_path = get_docker_compose_path()
-    if not docker_compose_path:
-        sys.stderr.write(
-            make_color("FAIL",
-                       "'docker-compose' not found.\n"))
-        exit(-1)
-    print("   'docker-compose' found at path '%s'\n" % docker_compose_path)
+    # print("Checking if 'docker-compose' is installed...")
+    # docker_compose_path = get_docker_compose_path()
+    # if not docker_compose_path:
+    #     sys.stderr.write(
+    #         make_color("FAIL",
+    #                    "'docker-compose' not found.\n"))
+    #     exit(-1)
+    # print("   'docker-compose' found at path '%s'\n" % docker_compose_path)
 
     stingar_env_exists = os.path.exists(
         "stingar.env")
