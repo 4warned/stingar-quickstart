@@ -19,7 +19,7 @@ services:
       - "127.0.0.1:9300:9300"
     environment:
       discovery.type: "single-node"
-      ES_JAVA_OPTS: "-Xmx1G -Xms1G" # modify this runtime memory allocation setting as appropriate (e.g. "-Xmx1G -Xms1G")
+      ES_JAVA_OPTS: "-Xmx1G -Xms1G" # modify this runtime memory allocation setting as appropriate (e.g. "-Xmx2G -Xms2G")
   
   kibana:
     user: "1000"
