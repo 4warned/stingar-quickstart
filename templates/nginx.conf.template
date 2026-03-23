@@ -56,7 +56,7 @@ http {
             proxy_read_timeout          300;
             send_timeout                300;
         }
-                location /kibana/ui {
+        location /kibana/ui {
             proxy_pass "http://kibana:5601/kibana/ui";
             proxy_connect_timeout       300;
             proxy_send_timeout          300;
@@ -89,7 +89,7 @@ http {
             proxy_set_header	X-Forwarded-Proto $scheme;
             proxy_set_header	X-Forwarded-Ssl on;
             proxy_set_header	X-Forwarded-Port $server_port;
-            proxy_set_header	X-Forwarded-Host $host;
+            proxy_set_header	X-Forwarded-Host $http_host;
             proxy_set_header Content-Length "";
             proxy_connect_timeout       300;
             proxy_send_timeout          300;
@@ -101,16 +101,13 @@ http {
             proxy_set_header    Host $host;
             proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header	X-Forwarded-Proto $scheme;
-	    proxy_set_header	X-Forwarded-Ssl on;
-	    proxy_set_header	X-Forwarded-Port $server_port;
-	    proxy_set_header	X-Forwarded-Host $host;
+	        proxy_set_header	X-Forwarded-Ssl on;
+	        proxy_set_header	X-Forwarded-Port $server_port;
+	        proxy_set_header	X-Forwarded-Host $host;
             proxy_connect_timeout       300;
             proxy_send_timeout          300;
             proxy_read_timeout          300;
             send_timeout                300;
         }
-
-
     }
-
 }
