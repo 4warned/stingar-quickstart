@@ -1,3 +1,5 @@
+# Nginx front for STINGAR UI, API, docs, Kibana. Aligned with (v2.2.2 layout).
+# ${ui_hostname} is substituted by configure_stingar.py.
 pid /run/nginx.pid;
 include /etc/nginx/modules-enabled/*.conf;
 events {
@@ -85,11 +87,11 @@ http {
         location /check_auth {
             proxy_pass http://stingarui:3000/check_auth;
             proxy_set_header Host $host;
-            proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header	X-Forwarded-Proto $scheme;
-            proxy_set_header	X-Forwarded-Ssl on;
-            proxy_set_header	X-Forwarded-Port $server_port;
-            proxy_set_header	X-Forwarded-Host $http_host;
+            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header    X-Forwarded-Proto $scheme;
+            proxy_set_header    X-Forwarded-Ssl on;
+            proxy_set_header    X-Forwarded-Port $server_port;
+            proxy_set_header    X-Forwarded-Host $http_host;
             proxy_set_header Content-Length "";
             proxy_connect_timeout       300;
             proxy_send_timeout          300;
@@ -99,11 +101,11 @@ http {
         location / {
             proxy_pass http://stingarui:3000/;
             proxy_set_header    Host $host;
-            proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header	X-Forwarded-Proto $scheme;
-	        proxy_set_header	X-Forwarded-Ssl on;
-	        proxy_set_header	X-Forwarded-Port $server_port;
-	        proxy_set_header	X-Forwarded-Host $host;
+            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header    X-Forwarded-Proto $scheme;
+            proxy_set_header    X-Forwarded-Ssl on;
+            proxy_set_header    X-Forwarded-Port $server_port;
+            proxy_set_header    X-Forwarded-Host $http_host;
             proxy_connect_timeout       300;
             proxy_send_timeout          300;
             proxy_read_timeout          300;

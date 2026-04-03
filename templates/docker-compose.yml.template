@@ -1,29 +1,30 @@
+# STINGAR platform stack. Container images pinned to production release v2.2.2.
+# Aligned with stingar-development infra/terraform/docker-compose.yml.tpl
 services:
   docs:
-    image: 4warned/stingar-user-docs:latest
+    image: 4warned/stingar-user-docs:v2.2.2
 
   elasticsearch:
     user: "1000"
-    image: 4warned/elasticsearch:latest
+    image: 4warned/elasticsearch:v2.2.2
     healthcheck:
       test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health?wait_for_status=yellow || exit 1"]
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 10s
+      retries: 12
+      start_period: 120s
     volumes:
       - elastic_data:/usr/share/elasticsearch/data:z
-      #- ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      #- ./backup:/usr/share/elasticsearch/backup
     ports:
       - "127.0.0.1:9200:9200"
       - "127.0.0.1:9300:9300"
     environment:
       discovery.type: "single-node"
-      ES_JAVA_OPTS: "-Xmx1G -Xms1G" # modify this runtime memory allocation setting as appropriate (e.g. "-Xmx2G -Xms2G")
-  
+      ES_JAVA_OPTS: "-Xmx1G -Xms1G"
+
   kibana:
     user: "1000"
-    image: 4warned/kibana:latest
+    image: 4warned/kibana:v2.2.2
     ports:
       - "127.0.0.1:5601:5601"
     depends_on:
@@ -31,10 +32,10 @@ services:
         condition: service_healthy
 
   redis:
-    image: redis:7.0.4
+    image: redis:7-alpine
 
   fluentd:
-    image: 4warned/fluentd:latest
+    image: 4warned/fluentd:v2.2.2
     ports:
       - "24224:24224"
       - "24224:24224/udp"
@@ -45,50 +46,68 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
-    #volumes:
-      #  - ./stingar-logs:/var/log/stingar
-      #  - ./fluent.conf:/fluentd/etc/fluent.conf
-      
+
   stingarapi:
-    image: 4warned/stingar-api:latest
+    image: 4warned/stingar-api:v2.2.2
     env_file:
       - stingar.env
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v2', timeout=5)"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
     volumes:
       - ./storage/db:/srv/db:z
+      - honeypot_templates:/opt/templates
+      - ./docker-compose.yml:/app/docker-compose.yml:rw
+      - ./stingar.env:/app/stingar.env:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
       elasticsearch:
         condition: service_healthy
 
   stingarui:
-    image: 4warned/stingar-ui:latest
+    image: 4warned/stingar-ui:v2.2.2
     env_file:
-      - ./stingar.env
+      - stingar.env
+    environment:
+      - STINGAR_ENV_PATH=/app/stingar.env
+    depends_on:
+      stingarapi:
+        condition: service_healthy
     volumes:
       - bundle:/bundle
       - node_module_cache:/stingar-ui/node_modules
+      - ./stingar.env:/app/stingar.env:ro
 
   web:
-    image: nginx
+    image: nginx:alpine
     container_name: nginx
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
       - ./certs:/etc/nginx/conf.d:z
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - credentials:/credentials
+    depends_on:
+      - stingarui
+      - kibana
+      - docs
     restart: on-failure
 
   langstroth:
-    image: 4warned/langstroth:latest
+    image: 4warned/langstroth:v2.2.2
     env_file:
       - stingar.env
     depends_on:
-      - stingarapi
+      stingarapi:
+        condition: service_healthy
 
 volumes:
   bundle:
   node_module_cache:
   credentials:
   elastic_data:
-
+  honeypot_templates:
