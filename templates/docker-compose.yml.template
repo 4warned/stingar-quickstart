@@ -1,5 +1,4 @@
-# STINGAR platform stack. Container images pinned to production release v2.2.2.
-# Aligned with stingar-development infra/terraform/docker-compose.yml.tpl
+# STINGAR platform stack. Container images to latest production release v2.2.2.
 services:
   docs:
     image: 4warned/stingar-user-docs:v2.2.2
@@ -15,13 +14,15 @@ services:
       start_period: 120s
     volumes:
       - elastic_data:/usr/share/elasticsearch/data:z
+      #- ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      #- ./backup:/usr/share/elasticsearch/backup
     ports:
       - "127.0.0.1:9200:9200"
       - "127.0.0.1:9300:9300"
     environment:
       discovery.type: "single-node"
-      ES_JAVA_OPTS: "-Xmx1G -Xms1G"
-
+      ES_JAVA_OPTS: "-Xmx1G -Xms1G" # modify this runtime memory allocation setting as appropriate (e.g. "-Xmx2G -Xms2G")
+  
   kibana:
     user: "1000"
     image: 4warned/kibana:v2.2.2
@@ -46,7 +47,10 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
-
+    #volumes:
+      #  - ./stingar-logs:/var/log/stingar
+      #  - ./fluent.conf:/fluentd/etc/fluent.conf
+      
   stingarapi:
     image: 4warned/stingar-api:v2.2.2
     env_file:
