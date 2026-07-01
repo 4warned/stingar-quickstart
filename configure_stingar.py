@@ -7,6 +7,14 @@ import secrets
 from getpass import getpass
 from urllib.parse import urlparse
 
+from runtime_config import (
+    DEFAULT_STINGAR_VERSION,
+    detect_os_runtime,
+    get_runtime_config,
+    validate_runtime_tools,
+    write_runtime_file,
+)
+
 
 def make_color(color, msg):
     bcolors = {
@@ -47,11 +55,7 @@ def generate_stingar_file(output_file, template_file, force_overwrite=True, **kw
         sys.stderr.write("Not writing file, add -f to override\n")
 
 
-def test_registry_login(registry, username, password):
-    return os.system("docker login -u %s -p %s %s" % (username, password, registry))
-
-
-def configure_stingar():
+def configure_stingar(runtime_config):
     print(make_color(
         "BOLD",
         ("Enter the URL where your STINGAR web app will be available. The "
@@ -62,16 +66,13 @@ def configure_stingar():
     while not url:
         prompt = make_color("BOLD", "  Domain: ")
         url = input(prompt)
-        # if it's a bare fqdn, prepend the proto scheme https so we can use urlparse
-        # without a scheme, urlparse puts the full url + path all in netloc attribute of its return object
-        # that makes it difficult later to determine if there's a custom path in the url
         if not url.startswith('http'):
             url = 'https://' + url
         url_parsed = urlparse(url)
         try:
             socket.gethostbyname(url_parsed.netloc)
             domain = url_parsed.netloc
-        except Exception as e:
+        except Exception:
             sys.stderr.write(
                 make_color("FAIL",
                            "%s is not an active domain name\n" % url_parsed.netloc))
@@ -85,37 +86,10 @@ def configure_stingar():
 
     touch('stingar.env')
 
-    # Configure Docker repository information
     docker_repository = ""
     docker_username = ""
     docker_password = ""
-    #prompt = make_color("BOLD", "Do you wish to specify an alternate Docker registry? (y/n):") + make_color("OKBLUE",
-    #                                                                                                        " [y] ")
-    #answer = input(prompt)
-    #if not answer:
-    #    answer = 'y'
-    #set_registry = answer.lower() == ("y" or "yes")
-    #if set_registry:
-    #    prompt = make_color("BOLD", "Please enter the URL for the Docker registry:") \
-    #             + make_color("OKBLUE", " [hub.docker.com] ")
-    #    docker_repository = input(prompt)
-    #    if not docker_repository:
-    #        docker_repository = "4warned"
-    #        #docker_repository = "stingarregistry.azurecr.io"
-    #    prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "username") + ": "
-    #    docker_username = input(prompt)
-    #    prompt = make_color("BOLD", 'Please enter your Docker registry ') + make_color("UNDERLINE", "password") + ": "
-    #    docker_password = getpass(prompt)
 
-    #    print("Testing registry authentication...")
-        #if test_registry_login(docker_repository, docker_username, docker_password):
-       #     print(make_color("FAIL",
-       #                      "Authentication to %s failed." % docker_repository))
-       #     exit(-1)
-       # print(make_color("OKGREEN",
-       #                  "Authentication to %s succeeded." % docker_repository))
-
-    # Configure syslog outpout options
     syslog_enabled = "false"
     syslog_host = ""
     prompt = make_color("BOLD", "Do you wish to enable Syslog logging to a remote syslog server? (y/n): ") + \
@@ -127,7 +101,6 @@ def configure_stingar():
         prompt = make_color("BOLD", 'Please enter the URL for the remote Syslog server: ')
         syslog_host = input(prompt)
 
-    # Configure CIFv3 output options
     cif_enabled = "false"
     cif_host = ""
     cif_token = ""
@@ -145,8 +118,9 @@ def configure_stingar():
         prompt = make_color("BOLD", 'Please enter a name you wish to be associated with your organization: ')
         cif_provider = input(prompt)
 
+    stingar_version = os.environ.get("STINGAR_VERSION", DEFAULT_STINGAR_VERSION)
+
     print("")
-    # Generate stingar.env
     generate_stingar_file(output_file="stingar.env",
                           template_file="templates/stingar.env.template",
                           api_key=generate_secret(),
@@ -163,58 +137,53 @@ def configure_stingar():
                           docker_username=docker_username,
                           docker_password=docker_password,
                           ui_hostname=domain,
-                          fluentd_hostname=domain
+                          fluentd_hostname=domain,
+                          update_service_enabled=runtime_config["update_service_enabled"],
+                          container_runtime=runtime_config["container_runtime"],
                           )
 
-    # Generate nginx.conf
     generate_stingar_file(output_file="nginx.conf",
                           template_file="templates/nginx.conf.template",
                           ui_hostname=domain)
 
-    #if docker_repository:
-    #    docker_repository = docker_repository + "/"
-    # Generate docker-compose.yml
     generate_stingar_file(output_file="docker-compose.yml",
                           template_file="templates/docker-compose.yml.template",
                           docker_repository=docker_repository,
-                          cert_path=cert_path
+                          cert_path=cert_path,
+                          stingar_version=stingar_version,
+                          volume_selinux=runtime_config["volume_selinux"],
+                          nginx_volume_opts=runtime_config["nginx_volume_opts"],
+                          socket_host_path=runtime_config["socket_host_path"],
                           )
+
+    write_runtime_file(runtime_config)
     print("")
-
-
-def get_docker_path():
-    return shutil.which("docker")
-
-
-#def get_docker_compose_path():
-    #return shutil.which("docker-compose")
+    if runtime_config["runtime"] == "podman":
+        print(make_color(
+            "WARNING",
+            "Podman install: in-app auto-update is disabled. "
+            "Upgrade with: ./scripts/compose.sh pull && ./scripts/compose.sh up -d"))
+    print(make_color("OKGREEN", "Launch STINGAR with: %s" % runtime_config["launch_hint"]))
+    print("")
 
 
 def main():
+    runtime = detect_os_runtime()
+    runtime_config = get_runtime_config(runtime)
 
-    # Check if docker is installed
     print("")
-    print("Checking if 'docker' is installed...")
-    docker_path = get_docker_path()
-    if not docker_path:
+    print("Container runtime: %s (OS family detection; override with CONTAINER_RUNTIME)" % runtime)
+    print("Checking container tools...")
+    ok, message = validate_runtime_tools(runtime_config)
+    if not ok:
+        sys.stderr.write(make_color("FAIL", message + "\n"))
         sys.stderr.write(
-            make_color("FAIL",
-                       "'docker' not found.\n"))
-        exit(-1)
-    print("   'docker' found at path '%s'\n" % docker_path)
+            make_color("WARNING",
+                       "Run: sudo ./scripts/install_prerequisites.sh\n"))
+        sys.exit(1)
+    print("   %s\n" % message)
 
-    # Check if docker-compose is installed
-    # print("Checking if 'docker-compose' is installed...")
-    # docker_compose_path = get_docker_compose_path()
-    # if not docker_compose_path:
-    #     sys.stderr.write(
-    #         make_color("FAIL",
-    #                    "'docker-compose' not found.\n"))
-    #     exit(-1)
-    # print("   'docker-compose' found at path '%s'\n" % docker_compose_path)
-
-    stingar_env_exists = os.path.exists(
-        "stingar.env")
+    stingar_env_exists = os.path.exists("stingar.env")
 
     reconfig = False
     if stingar_env_exists:
@@ -227,7 +196,7 @@ def main():
         reconfig = answer.lower() == ("y" or "yes")
 
     if reconfig or not stingar_env_exists:
-        configure_stingar()
+        configure_stingar(runtime_config)
     else:
         print("Will not reconfigure stingar. Terminating.")
 
