@@ -67,6 +67,45 @@ map_compose_arch() {
   esac
 }
 
+redhat_pkg_manager() {
+  if command -v dnf >/dev/null 2>&1; then
+    echo "dnf"
+  elif command -v yum >/dev/null 2>&1; then
+    echo "yum"
+  else
+    die "Neither dnf nor yum found"
+  fi
+}
+
+# UBI 9 and minimal RHEL images ship curl-minimal, which conflicts with the
+# full curl package. Never install both; use whichever provides /usr/bin/curl.
+ensure_curl() {
+  local pkg="$1"
+  if command -v curl >/dev/null 2>&1; then
+    log "Download tool: $(command -v curl)"
+    return 0
+  fi
+  log "Installing curl-minimal for downloads..."
+  if $pkg install -y curl-minimal; then
+    return 0
+  fi
+  log "curl-minimal unavailable; installing curl package..."
+  $pkg install -y curl
+}
+
+enable_podman_socket() {
+  if [[ ! -d /run/systemd/system ]] || ! command -v systemctl >/dev/null 2>&1; then
+    log "Note: systemd not running; skipping podman.socket enable (expected in containers)."
+    return 0
+  fi
+  systemctl enable podman.socket
+  if systemctl start podman.socket; then
+    log "Podman socket enabled (Docker API compatibility via podman-docker)."
+  else
+    log "Warning: podman.socket could not be started; verify on a systemd host."
+  fi
+}
+
 install_compose_plugin() {
   local arch url dest
   arch="$(map_compose_arch)"
@@ -113,19 +152,14 @@ install_docker_debian() {
 install_podman_redhat() {
   log "Installing Podman (RedHat family)..."
   local pkg
-  if command -v dnf >/dev/null 2>&1; then
-    pkg="dnf"
-  elif command -v yum >/dev/null 2>&1; then
-    pkg="yum"
-  else
-    die "Neither dnf nor yum found"
-  fi
-  $pkg install -y podman podman-docker curl
+  pkg="$(redhat_pkg_manager)"
+  # Do not install the full curl package here: UBI 9 ships curl-minimal and dnf
+  # will fail if both are requested. ensure_curl() runs before downloading assets.
+  $pkg install -y podman podman-docker
 
+  ensure_curl "$pkg"
   install_compose_plugin
-
-  systemctl enable --now podman.socket
-  log "Podman socket enabled (Docker API compatibility via podman-docker)."
+  enable_podman_socket
 
   if ! podman compose version >/dev/null 2>&1; then
     die "'podman compose' failed after installing Compose plugin. Check network/arch."
