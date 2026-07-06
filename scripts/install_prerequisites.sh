@@ -123,23 +123,35 @@ install_docker_debian() {
   apt-get install -y ca-certificates curl gnupg python3 python3-venv
 
   install -m 0755 -d /etc/apt/keyrings
-  local codename
+  local codename distro_uri gpg_url
   # shellcheck disable=SC1091
   source /etc/os-release
-  if [[ "${ID}" == "debian" || "${ID_LIKE:-}" == *debian* ]]; then
+  # Ubuntu also reports ID_LIKE=debian; match on ID, not ID_LIKE, so Ubuntu
+  # hosts use download.docker.com/linux/ubuntu (not .../debian).
+  if [[ "${ID}" == "ubuntu" ]]; then
+    codename="${UBUNTU_CODENAME:-${VERSION_CODENAME:-$(lsb_release -cs 2>/dev/null || echo noble)}}"
+    gpg_url="https://download.docker.com/linux/ubuntu/gpg"
+    distro_uri="https://download.docker.com/linux/ubuntu"
+  elif [[ "${ID}" == "debian" ]]; then
     codename="${VERSION_CODENAME:-bookworm}"
-    curl -fsSL "https://download.docker.com/linux/debian/gpg" \
-      -o /etc/apt/keyrings/docker.asc
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian ${codename} stable" \
-      > /etc/apt/sources.list.d/docker.list
+    gpg_url="https://download.docker.com/linux/debian/gpg"
+    distro_uri="https://download.docker.com/linux/debian"
   else
-    codename="${VERSION_CODENAME:-$(lsb_release -cs 2>/dev/null || echo jammy)}"
-    curl -fsSL "https://download.docker.com/linux/ubuntu/gpg" \
-      -o /etc/apt/keyrings/docker.asc
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu ${codename} stable" \
-      > /etc/apt/sources.list.d/docker.list
+    die "Automatic Docker install supports Debian and Ubuntu only (detected ID=${ID})."
   fi
+
+  log "Using Docker CE apt suite: ${codename} (${distro_uri})"
+  curl -fsSL "${gpg_url}" -o /etc/apt/keyrings/docker.asc
   chmod a+r /etc/apt/keyrings/docker.asc
+  rm -f /etc/apt/sources.list.d/docker.list
+  tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: ${distro_uri}
+Suites: ${codename}
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
   apt-get update
   apt-get install -y \
     docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
