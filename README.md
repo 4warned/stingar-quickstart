@@ -4,9 +4,9 @@ Interactive helper (`configure_stingar.py`) generates `stingar.env`, `nginx.conf
 
 Detects the host OS and selects **Docker** (Debian/Ubuntu) or **Podman** (RedHat-family), matching the v2.4 honeypot deployment engine.
 
-## Release v2.4
+## Release v2.4.5
 
-Pins all `4warned/*` images to **`v2.4`**. Override with `STINGAR_VERSION=v2.4.x python3 configure_stingar.py`.
+Pins all `4warned/*` images to **`v2.4.5`** (security hotfix). Override with `STINGAR_VERSION=v2.4.x python3 configure_stingar.py`.
 
 ## Usage
 
