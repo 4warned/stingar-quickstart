@@ -12,7 +12,7 @@ import shutil
 import subprocess
 
 RUNTIME_FILE = ".stingar-runtime"
-DEFAULT_STINGAR_VERSION = "v2.4.5"
+DEFAULT_STINGAR_VERSION = "latest"
 
 REDHAT_OS_IDS = frozenset(
     {"rhel", "rocky", "almalinux", "fedora", "centos", "ol", "oraclelinux"}
